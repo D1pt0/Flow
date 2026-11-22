@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a problem with playback, browsing or the interface
+title: "[Bug] "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Flow version
+      placeholder: "1.8.0"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Phone model and Android version
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Include what you expected and steps to reproduce. Remove passwords and private links.
+    validations:
+      required: true
+  - type: textarea
+    id: format
+    attributes:
+      label: Media details, if relevant
+      description: File extension, codec information or a screenshot. Avoid uploading private media.

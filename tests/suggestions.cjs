@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const source=fs.readFileSync('android/assets/web/app.js','utf8');
+const fn=source.slice(source.indexOf('function titleAvailability('),source.indexOf('function renderSuggestions()'));
+const context={normalizeSearch:s=>s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim(),title:i=>i.title||i.name,year:i=>i.year||'',catalogItems:()=>[{name:'Dune',year:'2021'}],catalogRunning:true,catalogFailed:0};
+context.homeItemsInScope=context.catalogItems;context.homeScope=null;context.scopeStatus=()=>({running:context.catalogRunning,failed:context.catalogFailed});vm.createContext(context);vm.runInContext(fn,context);
+assert.equal(context.titleAvailability({name:'Dune',year:2021}),'Available on server');
+assert.equal(context.titleAvailability({name:'Dune',year:1984}),'Checking server…');
+context.catalogRunning=false;assert.equal(context.titleAvailability({name:'Dune',year:1984}),'Not found on server');
+context.catalogFailed=2;assert(context.titleAvailability({name:'Other film'}).includes('Not confirmed'));
+console.log('PASS exact title/year availability and incomplete-scan suggestions.');

@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const source=fs.readFileSync('android/assets/web/app.js','utf8');
+let now=1000,scroll,timers=[],renders=0;
+const context={Date:{now:()=>now},window:{addEventListener:(name,fn)=>{scroll=fn}},setTimeout:fn=>{timers.push(fn);return timers.length},state:{view:'home'},renderHomeGrid:()=>renders++,renderSuggestions(){},renderExplore(){},$:()=>({value:''})};
+vm.createContext(context);
+vm.runInContext(source.slice(source.indexOf('let catalogPaintTimer='),source.indexOf('async function startCatalog(')),context);
+context.scheduleCatalogPaint();context.scheduleCatalogPaint();assert.equal(timers.length,1);
+scroll();timers.shift()();assert.equal(renders,0);
+now=1400;timers.shift()();assert.equal(renders,1);
+console.log('PASS catalog updates coalesce and defer during scrolling.');

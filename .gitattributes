@@ -1,0 +1,13 @@
+* text=auto
+*.java text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.ps1 text eol=crlf
+*.yml text eol=lf
+*.jar binary
+*.png binary
+*.jpg binary
+*.apk binary

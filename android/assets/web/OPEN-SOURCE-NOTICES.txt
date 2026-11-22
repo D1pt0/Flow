@@ -1,0 +1,35 @@
+# Third-party components
+
+## VideoLAN LibVLC 3.7.7
+
+Copyright VideoLAN and VLC contributors. Licensed under GNU LGPL 2.1 or later. Unmodified Java bindings and native shared libraries are distributed in this APK.
+
+- Publisher and project: https://code.videolan.org/videolan/libvlcjni
+- Exact Maven artifact: https://repo.maven.apache.org/maven2/org/videolan/android/libvlc-all/3.7.7/
+- Published Java binding source: https://repo.maven.apache.org/maven2/org/videolan/android/libvlc-all/3.7.7/libvlc-all-3.7.7-sources.jar
+- Native build/source repository and build instructions: https://code.videolan.org/videolan/libvlcjni
+- VLC source: https://code.videolan.org/videolan/vlc
+- Upstream dependency/contrib source build recipes: https://code.videolan.org/videolan/vlc/-/tree/master/contrib
+
+The license text is in assets/web/LGPL-2.1.txt and is accessible in the app's About dialog. Rebuild scripts accept a native dependency directory so that modified/replacement LibVLC classes and shared libraries can be linked into Flow. No separate VLC app is required.
+
+LibVLC incorporates codec libraries including FFmpeg and other VideoLAN/contrib components under their upstream licenses; preserve upstream copyright/license notices when redistributing or replacing the native artifact. Published source and contrib build recipes are linked above. A copy of the published Java binding source is included in third-party/.
+
+## AndroidX
+
+AndroidX Annotation, Collection, Core, Lifecycle and Architecture Components are copyright The Android Open Source Project and distributed under Apache License 2.0, with any retained per-file notices. Official source: https://android.googlesource.com/platform/frameworks/support/ . Artifact versions and publisher URLs are pinned in fetch-native.py.
+
+## Kotlin standard library 2.2.10
+
+Copyright JetBrains and contributors, Apache License 2.0. Source: https://github.com/JetBrains/kotlin/tree/v2.2.10/libraries/stdlib .
+
+## Movie text and facts
+
+Wikipedia lead extracts: CC BY-SA 4.0, source article credited in each movie's details. https://creativecommons.org/licenses/by-sa/4.0/ . Wikidata: CC0. Movie and series artwork is retrieved at runtime from IMDb, Wikipedia/Wikimedia or the selected media server. Images retain their respective owners’ rights and licenses.
+
+## Build-only tooling
+
+OpenJDK, Android SDK tools and R8 are downloaded from their official publishers and are not packaged as phone application binaries. R8 9.5.33 is used to support the pinned Kotlin metadata version.
+
+
+Native engine build identifies VLC 3.0.25, changeset 3.0.24-35-gc7e5d68ee5. Source revision: https://code.videolan.org/videolan/vlc/-/tree/c7e5d68ee5

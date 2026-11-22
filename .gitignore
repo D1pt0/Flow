@@ -1,0 +1,37 @@
+# Build output, dependency downloads and release binaries
+.build/
+.dependencies/
+release/
+build/
+dist/
+*.apk
+*.idsig
+*.aar
+*.jar
+*.zip
+!android/third-party/*-sources.jar
+
+# Signing material and local credentials
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+signing.json
+.env
+.env.*
+!*.example
+local.properties
+LOCAL-SETUP.md
+
+# Tool and OS state
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log

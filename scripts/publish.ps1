@@ -12,6 +12,14 @@ function Invoke-Checked {
     & $Command @Arguments
     if ($LASTEXITCODE -ne 0) { throw "$Command failed. Resolve the reported error before retrying." }
 }
+# Windows PowerShell 5.1 promotes redirected native stderr to ErrorRecords.
+# A failed existence check is a result to inspect, not a terminating script error.
+function Invoke-Probe {
+    param([string]$Command, [string[]]$Arguments)
+    $ErrorActionPreference = "Continue"
+    $output = & $Command @Arguments 2>$null
+    [pscustomobject]@{ Output = $output; ExitCode = $LASTEXITCODE }
+}
 if ($Owner -notmatch '^[a-zA-Z0-9-]+$' -or $Name -notmatch '^[a-zA-Z0-9_.-]+$') { throw "Invalid repository owner or name." }
 Push-Location $repository
 try {
@@ -29,13 +37,14 @@ try {
     if ($tagCommit -ne $headCommit) { throw "The release tag does not point at the current source commit." }
     $target = "$Owner/$Name"
     $expected = "https://github.com/$target.git"
-    $remote = & git remote get-url origin 2>$null
-    if ($LASTEXITCODE -eq 0) {
+    $remoteProbe = Invoke-Probe "git" @("remote", "get-url", "origin")
+    $remote = $remoteProbe.Output
+    if ($remoteProbe.ExitCode -eq 0) {
         $normalized = $remote -replace '^git@github.com:', 'https://github.com/'
         if (($normalized -replace '\.git/?$', '').TrimEnd('/') -ine "https://github.com/$target") { throw "origin points to a different repository." }
     } else { $remote = $null }
-    & gh repo view $target --json nameWithOwner 1>$null 2>$null
-    $exists = $LASTEXITCODE -eq 0
+    $repositoryProbe = Invoke-Probe "gh" @("repo", "view", $target, "--json", "nameWithOwner")
+    $exists = $repositoryProbe.ExitCode -eq 0
     if ($exists) {
         if (-not $remote) { Invoke-Checked "git" @("remote", "add", "origin", $expected) }
         Invoke-Checked "git" @("push", "-u", "origin", "main")
@@ -46,8 +55,8 @@ try {
         Invoke-Checked "git" @("push", "-u", "origin", "main")
     }
     Invoke-Checked "git" @("push", "origin", $tag)
-    & gh release view $tag --repo $target 1>$null 2>$null
-    if ($LASTEXITCODE -eq 0) {
+    $releaseProbe = Invoke-Probe "gh" @("release", "view", $tag, "--repo", $target)
+    if ($releaseProbe.ExitCode -eq 0) {
         Write-Host "Release $tag already exists. Review its assets at https://github.com/$target/releases/tag/$tag"
         return
     }

@@ -70,3 +70,7 @@ These checks exercise cache expiry, watched history, title suggestions,
 poster-card reuse, deferred painting, recommendation mixing and category
 search. They use local fixtures. They do not simulate video decoding or phone
 touch hardware.
+
+The release-helper regression check can also be run with Windows PowerShell 5.1
+or PowerShell 7 from the repository root using ./tests/publish-probes.ps1.
+It performs read-only local Git probes and makes no network requests.
